@@ -1,7 +1,5 @@
-name: project-name
-title: Project Name
+name: doc-modeling-guidelines
+title: Modeling Guidelines
 version: true
-prerelease: "-draft"
-start_page: index.adoc
 nav:
 - modules/ROOT/nav.adoc
