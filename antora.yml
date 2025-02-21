@@ -3,3 +3,4 @@ title: Modeling Guidelines
 version: true
 nav:
 - modules/ROOT/nav.adoc
+- modules/cim-conformity-and-extensions/nav.adoc

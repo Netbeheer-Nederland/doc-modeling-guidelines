@@ -1,0 +1,219 @@
+= Profiling and Extending the CIM with LinkML
+
+Use cases may require extensions to the CIM, or simply the use of other vocabularies and schemas besides those from or based on the CIM. This can be achieved in a variety of ways, each of which having their own pros and cons. Most notably, modeling choices might impact compliance with the CIM standard.
+
+In this document we will touch on:
+
+* What it means to be compliant with the CIM standard, and what is required in order to achieve it.
+* How to extend the CIM if what it provides does not suffice for a certain use case.
+* How to choose between the various ways in which the CIM can be extended, discussing in particular the trade-off between semantic expressiveness and CIM compliance.
+
+[NOTE]
+--
+This guide closely follows the <<CIM-PRIMER>> where applicable, but sets out to enhance it in two ways by:
+
+* decoupling the modeling principles and guidelines from the practical instructions specific to Sparx EA and UML;
+* providing practical instructions for using LinkML for how to do the profiling and extending.
+--
+
+
+== CIM compliance
+"We need to conform to the standard."
+-- Anyone
+
+Plenty of people understand the importance of standardization, but what exactly is required in order be compliant is not always clear. This could either be due to a lacking level of formality of the standard, or due to people misunderstanding or not knowing how to conform.
+
+.CIM data types
+====
+The CIM has defined custom data types ("CIM data types") which are modeled as classes in the official UML model. However, many vendors choose not to implement these data types as classes or some other compound structure, but represent them as simple primitives.
+
+Do these vendors conform to the standard?
+
+Technically, the answer is simply "no", but
+
+Is this deviating from the standard? It seems to be, but then again, some technical languages might not even be able to represent compound structures at all, in which case TODO
+====
+
+In the case of the
+
+=== Semantic compliance
+
+* Model elements mean what they are described to mean, and no liberties or deviations are allowed.
+* Using the right semantic perspectives for the job, including choosing the appropriate standard.
+
+NOTE: These compliance rules are heavily influenced by the canonical CIM being modeled in UML, which is a modeling language for primarily defining structures and constraints, and has only very limited capabilities for expressing semantics. Contrast this to the Web Ontology Language (OWL) for example, which would have allowed for much more precisely defined compliance rules.
+
+
+
+
+
+=== Structural compliance
+
+The CIM comes with a set of profile groups, each of which consists of multiple profiles
+
+
+== Profiling with LinkML
+
+=== Creating a subset of the CIM
+
+=== Adding constraints
+
+=== Adding machine-readable semantics
+
+==== Linked Data URI mappings
+
+==== Term definition mappings
+
+=== Using other vocabularies and schemas
+
+== Extending the CIM
+
+=== Adding new (sub)classes
+
+=== Adding new attributes
+
+=== Adding new relations
+
+=== Further constraining
+
+==== Enumerations
+
+==== Code lists
+
+== Dealing with non-compliance
+
+Having the flexibility of extending profiles beyond the use of just the canonical CIM is great, but in many cases it causes non-conformity and as a consequence also non-interoperability with CIM-compliant software.
+
+.Subclassing breaks standard conformity
+====
+Merely creating a subclass from some CIM class will introduce a new name that is unknown to all software that knows only CIM.
+====
+
+What's the point of a standard if the smallest deviations -- in many cases necessary ones to make it useful -- cause non-conformity?
+
+=== Profile variants
+
+One way of dealing with the issue is to keep two variants of the profile: one which conforms neatly with the CIM, the other which contains the extensions which (might) break conformity.
+
+This is not always possible, since in some cases the extensions add necessary expressiveness for modeling the use case.
+
+In cases where this is possible, it basically means a loss of information. Examples of this might be:
+
+* ignored optional attributes or relations
+* the use of some CIM ancestor class instead of the more semantically precise extension class
+
+==== Manual maintenance
+
+The most straightforward way of maintaining these variants of the profile is to do this manually. This becomes cumbersome very quickly though, and is very error-prone and time-consuming.
+
+Thanks to the formal, machine-readable nature of our models, we can rely (at least in part) on automating this process.
+
+==== Generating conformant profile variants
+
+As long as we make sure we model extensions in a machine-readable way, we can benefit from automation.
+
+The idea is as follows:
+
+* The extended profile is the most accurate and semantically rich model, so this could be maintained as the _main profile_.
+* In the main profile, relations and (machine-readable) annotations are added to the extensions to convey as much information as possible about how the extensions relate to the canonical model elements they interact with.
+* The CIM-compliant profile variant can then be generated from the main profile using tooling.
+
+.Weakening semantic expressiveness to gain CIM-compliance
+====
+Suppose an extension class `SuperConductingACLineSegment` is introduced, which is a subclass of `ACLineSegment`. In LinkML, this would look as follows:
+
+[source,yaml]
+--
+classes:
+  SuperConductingACLineSegment:
+    is_a: ACLineSegment
+--
+
+Software that expect CIM-compliant data which receive data which contains line segments of the type `SuperConductingACLineSegment` will not be able to handle the data. However, every mention of `SuperConductingACLineSegment`
+
+The specialization is encoded into the model relying on the semantics of the modeling language, ensuring
+
+Note that LinkML also supports specialization of attributes and slots this way. For example, the relation `isFatherOf` could be expressed to be a subslot of `isRelativeOf`, completely analgously to the subclass case.
+
+====
+
+NOTE: Possibly the automated generation only gets so you so far, and some manual edits still need to be done. If this is the case, make sure to have proper documentation and checks in place for how to deal with this in a deterministic way. Leverage machine-readability where possible.
+
+
+
+== Example
+
+In the Netherlands DSOs make a distinction between primary and secondary usage points, as well as them being physical or virtual.
+How can we model this in the CIM?
+
+=== Canonical CIM
+
+In the CIM, equipment (`cim:Equipment`) can be related to zero or more usage points (`cim:UsagePoint`) through the `cim:Equipment.UsagePoints` relation. The `cim:UsagePoint.isVirtual` attribute can be used to designate whether a usage point is virtual or physical. However, the CIM does not support distinguishing between primary and secondary usage points, so the best you can do is model it like this:
+
+.Modeling usage points with the canonical CIM
+image::ex_usagepoint_cim.svg[]
+
+We need to extend the CIM to be able to model our use case properly. Specifically, the challenge to solve is: where do we encode the information that discerns one usage point from another in regard to whether it's primary or secondary.
+
+WARNING: For illustrative purposes we will consider several methods, some of which are clearly not a great fit for this particular situation. They will still be covered, though, since they might be useful in other scenarions.
+
+=== Class specialization
+
+One way to extend the CIM is to consider the primary and secondary usage points to be specializations of a usage point, i.e. we could define two new subclasses:
+
+* `cim:PrimaryUsagePoint` is a subclass of `cim:UsagePoint`;
+* `cim:SecondaryUsagePoint` is a subclass of `cim:UsagePoint`.
+
+.Using subclasses for explicit discernment
+image::ex_usagepoint_subclass.excalidraw.svg[width=70%]
+
+==== Considerations
+
+* This method can only be used if all possible specializations are known beforehand, i.e. it's not dynamic nor depend on any other detail.
+* If additional attributes and relations apply to the more specialized forms of usage points, subclasses are the way to go.
+* Encoding the specialization kind into the name of the class implies it is an inherent characteristic of the concept the class represents. This means for example that being a "primary" usage point tells you something about that usage point, regardless of the context in which it is used. Caution is advised since subtle semantic impurity can come to bite you later.
+
+=== Add a discriminating attribute
+
+Instead of using subclasses, one can also use
+
+
+
+.Subclasses vs discriminating attribute
+[sidebar]
+--
+TODO.
+--
+
+
+=== Adding more specific relations
+
+
+
+
+
+
+
+
+
+
+
+[glossary]
+== Glossary
+
+[glossary]
+[[dfn-contextual-model]]contextual model:: See: <<dfn-profile>>.
+
+[[dfn-profile]](application) profile:: Subset of an <<dfn-information-model>> with application-specific constraints.
++
+Also known as: <<dfn-contextual-model>>.
+
+[[dfn-cim-profile]]CIM profile:: A <<dfn-profile,profile>> which is derived from the (full) canonical CIM.
+
+[[dfn-information-model]]information model:: A technology-agnostic representation of concepts, relationships, constraints, rules and operations to specify data semantics for a chosen domain of discourse.
+
+[[dfn-cim-extension]]CIM extension:: Whenever the
+
+[bibliography]
+== References
+* [[[CIM-PRIMER]]] Common Information Model; Primer: Ninth Edition.; EPRI, Palo Alto, CA: 2023.; 3002026852.

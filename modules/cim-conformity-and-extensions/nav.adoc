@@ -1,0 +1,1 @@
+* xref:cim-conformity-and-extensions:extending_cim.adoc[]
