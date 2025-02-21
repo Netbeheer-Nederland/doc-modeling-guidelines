@@ -1,0 +1,90 @@
+= Information Modeling of Data Products
+
+== Goals
+
+. **A formal representation of the domain, agnostic regarding systems and technology**.
+. A **Linked Data representation must be present**, but it's not necessarily the primary representation (and could be generated).
+. **Human-friendly visual representation** to provide a means of reference, for example in information requirements analysis or discussion.
+. **Explicit, machine-readable references of definitions from other models**.
+. **Definitions must be globally identifiable through the assignment of URIs** so they can be referenced unconditionally and simply.
+. **Maintenance** of the models and documentation **should be done in a VCS**.
+. **Automation** of tasks such as model linting and validation, and generation of technical schemas and documentation must be possible.
+
+=== Out of scope
+
+* _Nice to have_: Reasoning capabilities for knowledge inference and knowledge graphs.
+
+== Exploring our options
+
+* One model: a single LinkML schema for both the logical and the conceptual model.
+* Two models: LinkML for
+
+|===
+|Visual or code |  Logical or conceptual
+
+
+|===
+
+
+=== LinkML
+
+
+=== ERD in Draw.io
+
+
+=== OWL
+
+
+
+Roughly, all options fall into two categories:
+
+* representing the logical model in LinkML and having a separate conceptual model
+* using a single LinkML schema to represent both the conceptual and the logical model
+
+
+
+
+
+
+
+=== A single LinkML schema for both the conceptual and logical
+
+* Serves as conceptual model
+* Serves as logical model
+
+=== Separate conceptual and logical model
+
+* Logical model makes references to
+
+
+
+
+=== ERD in Draw.io
+
+* Master representation of conceptual model is the ERD drawing in Draw.io itself
+** Adhering to the formal nature of ERD makes the embedded model machine-readable and extractable
+* From this model a code-based Linked Data representation is generated (LinkML or OWL)
+* The logical model
+
+==== Pros
+
+* Complete freedom in visualization for optimal communicative efficiency
+** This can be semi-automated and validated
+* Formal, machine-readable representation of the model
+** A LinkML or OWL model can be generated from it
+
+==== Cons
+
+* Very hard to express all necessary information visually
+** URIs of referenced definitions from other models
+** Labels, optionally in other languages
+** Alignment (SKOS mappings) with thesauri
+* If it's a separate LinkML schema from the logical model, there will be a lot of redundancy and work to name things and keep them related
+* All changes to the model need to be done in Draw.io, which severely limits tooling support
+
+=== LinkML
+
+
+
+
+=== OWL
