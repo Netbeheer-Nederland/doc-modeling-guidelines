@@ -1,0 +1,25 @@
+# Vim
+.netrwhist
+*.swp
+*~
+
+# Node.js
+/node_modules/
+
+# VS Code
+/.vscode/
+
+# Build artefacts
+/docs/
+
+# IntelliJ IDEA
+/.idea/
+/*.iml
+/.ideavimrc
+
+# Asciidoctor
+./asciidoctor/
+
+# Diagrams.net
+*.bkp
+*.dtmp

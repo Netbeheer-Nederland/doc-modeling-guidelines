@@ -1,0 +1,7 @@
+name: project-name
+title: Project Name
+version: true
+prerelease: "-draft"
+start_page: index.adoc
+nav:
+- modules/ROOT/nav.adoc

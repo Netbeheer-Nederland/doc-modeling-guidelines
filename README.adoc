@@ -1,0 +1,3 @@
+= Template for Documentation Project
+
+Each documentation project is maintained in their own Git repository on GitHub. To ensure each project has the correct directory structure and configuration for the entire setup to work well, it is advised to use this template repository to bootstrap a new documentation project.
