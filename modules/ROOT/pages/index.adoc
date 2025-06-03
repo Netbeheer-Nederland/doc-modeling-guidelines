@@ -44,7 +44,7 @@ for usage.
 The _CIM_ is an information model that defines a common industry structure for a
 broad range of data critical to electric utilities, including grid model data.
 IEC CIM standards provide guidance on how the CIM information model can be used
-to enable data exchange. The CIM and the International Electrotechnical (IEC)
+to enable data exchange. The CIM and the International Electrotechnical Commission (IEC)
 61970 family of standards provide the basis for the structure of the NBNL grid
 model data. The information model described in _IEC 61970-301:2022_ forms the
 foundation and _IEC 61970-600-1:2021_ and _IEC 61970-600-2:2021_ -together
