@@ -1,0 +1,238 @@
+= Modeling Quantities and Measurements
+Bart Kleijngeld <bart.kleijngeld@alliander.com>
+1.0, June 4, 2025
+
+[source,yaml]
+....
+classes:
+  StaticVarCompensator:
+    attributes:
+      inductive_rating: <1>
+        range: float <2>
+        unit:
+          has_quantity_kind: qk:CurrentFlow  <3>
+          ucum_code: kA <4>
+      capactive_rating: <1>
+        range: float <2>
+        unit:
+          has_quantity_kind: qk:CurrentFlow <3>
+          ucum_code: A <4>
+....
+
+<1> These are two quantities.
+<2> Measurements of both quantities are represented as numeric values of the data type `float`.
+<3> Both quantities are of the same kind, meaning they can be compared.
+<4> The units of measurement used _do_ differ between the two quantities.
+
+Perhaps this table provides better clarity:
+
+[cols="1,1"]
+|===
+
+2+h|Quantity: `inductive_rating`
+
+|Value data type
+|`float`
+
+|Quantity kind
+|Current flow
+
+|Unit (of measurement)
+|`kA` (kilo Ampere)
+
+2+h| Quantity: `capacitive_rating`
+
+|Value data type
+|`float`
+
+|Quantity kind
+|Current flow
+
+|Unit (of measurement)
+|`A` (Ampere)
+
+|===
+
+So, in this example we have two quantities of the same kind, with different units because of a prefix (or multiplier) which scales the value.
+
+
+
+
+
+
+== Units of Measure
+
+=== Bound to quantity kind (schema level)
+
+Quantity kinds could be represented as types defined in the schema. If a unit of measurement is specified for it, this effectively makes that the default unit for the quantity kind whenever the type is used.
+
+For smaller models that represent specific use cases, it is likely that measurements across the dataset which are of the same quantity kind will use the same units (or reasonably could). In such cases this solution is really sound, since there is no repetition of information.
+
+=== Bound to quantity (attribute level)
+
+It is not uncommon for the same quantity kind to occur in a single dataset, but where different units are desired. For example, two different assets might have quantities of the same kind but with vastly different magnitudes, requiring one to measure with a mega prefix but not the other.
+
+IMPORTANT: Prefixes (or multipliers) can be essential to safeguard numeric precision of measurement values due to floating point limitations.
+
+To achieve this, the unit metadata can be provided with the attribute that represents the quantity. This way, every value of property is expressed to be using that unit.
+
+Note that it's possible to still make use of the custom type corresponding to the quantity kind, in which case this more specific unit would override the one of set at the quantity kind level.
+
+=== Bound to measurement (value level)
+
+In some cases you need maximal granularity, i.e. be able to specify the unit of measurement which applies to a (collections of) measurement value(s). This means that a quantity of some entity could have values which do not all use the same unit.
+
+This might occur if measurement values for some quantity can vary so greatly that for some values a prefix is required to retain sufficient numeric precision. Or perhaps a dataset contains measurements of some quantity associated with two entities of the same type, where different units might be required (or at least be beneficial).
+
+Taking this level of flexibility comes at significant cost though.
+
+Firstly, note that so far the unit information was mere metadata associated with types or attributes in the schema. Measurement values, however, are (instance) data, so to associate unit information with values, we have two options:
+
+1. If the language in which the data is represented supports (metadata) annotations at the value level, we could leverage that to provide the unit information for the value that way.
+2. The data model should provide means to express the unit information at the value level.
+
+In the case of (1), we consequently keep treating unit information as metadata as we have done with the storing of unit information with quantity kinds or quantities. However, we cannot assume what variety of languages will be used to represent the data in, and how expressive these languages are. Moreover, the ability to annotate metadata on specific values is quite a demand, unless perhaps we encode this information into comments which seems really subpar.
+
+Option (2), on the other hand, seems way more reasonable. The data model itself provides ways of representing measurements, quantity kinds and units. This way, in instance data these constructs become available naturally in the form of -- for example -- classes and enumerations. This is how the CIM has solved the issue so far.
+
+.Conceptual models and unit information
+[NOTE]
+--
+Deliberate care has been taken to speak of _data models_ and not _conceptual_ or _information models_.
+
+In a conceptual model, classes represent entity types from the (real-world) domain, and should not be used to represent measurements. It is reasonable, however, to provide annotations to accompany such information.
+
+In (logical) data models, on the other hand, it's fine to have classes and enumerations represent metadata such as privacy levels and units of measurement, especially if this benefits data.
+--
+
+
+
+
+
+'''
+
+* (compile-time) type annotations
+* (runtime) classes
+
+== `IntervalBlock`
+
+.CIM17 LinkML
+[%collapsible]
+====
+[source,yaml]
+....
+identifier: test_dp_meetdata_energiehubs
+contact_point: ritger.teunissen@alliander.com
+conforms_to: http://data.netbeheernederland.nl/data-product/dp-meetdata/
+release_date: "2025-01-08"
+version: 1.1.0
+market_evaluation_points:
+  - meter_readings:
+      - values_interval:
+          start: "2023-10-17"
+          end: "2999-12-31"
+        interval_blocks:
+          - interval_readings:
+              - value: 131.224361068149
+                time_stamp: "2024-11-22T13:00:00Z"
+              - value: 131.299243022597
+                time_stamp: "2024-11-22T13:15:00Z"
+              - value: 132.0301537
+                time_stamp: "2024-11-22T13:30:00Z"
+              - value: 131.1734701
+                time_stamp: "2024-11-22T13:45:00Z"
+            reading_type:
+              flow_direction: forward
+              multiplier: k
+              unit: W
+      - values_interval:
+          start: "2023-10-17"
+          end: "2999-12-31"
+        interval_blocks:
+          - interval_readings:
+              - value: 82.8008133781673
+                time_stamp: "2024-11-22T13:00:00Z"
+              - value: 83.4262394054705
+                time_stamp: "2024-11-22T13:15:00Z"
+              - value: 87.0049577428511
+                time_stamp: "2024-11-22T13:30:00Z"
+              - value: 82.3364836277116
+                time_stamp: "2024-11-22T13:45:00Z"
+            reading_type:
+              flow_direction: reverse
+              multiplier: k
+              unit: W
+    european_article_number_ean: "123456789101112131"
+  - meter_readings:
+      - values_interval:
+          start: "2023-10-17"
+          end: "2999-12-31"
+        interval_blocks:
+          - interval_readings:
+              - value: 54.6734982
+                time_stamp: "2024-12-05T17:45:00Z"
+            reading_type:
+              flow_direction: forward
+              multiplier: k
+              unit: W
+    european_article_number_ean: "131211101987654321"
+....
+====
+
+
+
+Here:
+* Units are specified using the `UnitSymbol` and `UnitMultipier` enumerations from the CIM
+* The quan
+
+
+.CIM18 LinkML
+[%collapsible]
+====
+[source,yaml]
+....
+DataSet:
+  market_evaluation_points:
+    range: MarketEvaluationPoint
+    multivalued: true
+
+MarketEvaluationPoint:
+  slots:
+    - MarketEvaluationPoint.MeterReadings
+
+MeterReading:
+  slots:
+    - MeterReading.IntervalBlocks
+
+IntervalBlock:
+  slots:
+    - IntervalBlock.ReadingType
+    - IntervalBlock.IntervalReading
+
+slots:
+  MarketEvaluationPoint.MeterReadings:
+    range: MeterReading
+    required: true
+    multivalued: true
+MeterReading.IntervalBlocks:
+    range: IntervalBlock
+    required: true
+    multivalued: true
+IntervalBlock.ReadingType:
+    range: ReadingType
+    required: true
+IntervalBlock.IntervalReadings:
+    range: IntervalReadings
+    required: true
+    multivalued: true
+....
+====
+
+
+
+
+
+[bibliography]
+== References
+
+* [[[LINKML-QUANTITIES]]] https://linkml.io/linkml/howtos/model-measurements.html[How to model quantities and measurements]
