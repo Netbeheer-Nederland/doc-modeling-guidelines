@@ -1,0 +1,30 @@
+= Boundary Point
+
+Boundary points define the places in the grid where responsibility for
+operation changes hands. These points capture the interface between system
+operators or between an operator and an end customer, and they are essential
+for modelling ownership and accountability within the network.
+
+== Core entities
+
+* ConnectivityNode: connection point in the network, linked to terminals.
+* Terminal: represents a conducting connection; here associated with a
+PowerTransformerEnd.
+* BoundaryPoint: represents the boundary point between TSO/TSO, TSO/DSO and/or
+SO/customer.
+* OperatingShare: specifies the share of operational responsibility.
+* OperatingParticipant: represents an entity with operational responsibility.
+* VoltageLevel: partitions a substation by operating voltage and can be linked
+to operating shares and participants.
+
+== Modelling choices
+
+* A ConnectivityNode is associated with a Terminal from a PowerTransformerEnd,
+forming the electrical point of interconnection.
+* A BoundaryPoint is linked to the ConnectivityNode, marking the boundary point
+in the grid.
+* This boundary indicates where responsibility shifts from one system operator
+to another, or to an end customer.
+* Ownership of a VoltageLevel is captured using OperatingShare and
+OperatingParticipant, ensuring the model can represent shared or full
+responsibility among multiple parties.

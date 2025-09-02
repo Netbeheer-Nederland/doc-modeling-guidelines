@@ -1,0 +1,130 @@
+= Topology
+
+.Topology
+[d2,svg,theme=4]
+----
+vars: {
+  d2-config: {
+    layout-engine: elk
+    pad: 20
+  }
+}
+
+legend: "" {
+  style: {
+    fill: transparent
+    stroke: transparent
+  }
+  grid-rows: 3
+  grid-columns: 2
+  grid-gap: 10
+  near: bottom-right
+  iec61968_color: "" {
+    style: {
+      fill: "#d1e7c2"
+      stroke: black
+      stroke-width: 1
+    }
+    width: 10
+    height: 10
+  }
+  iec61968_text: "IEC61968 (Enterprise)" {
+    shape: text
+  }
+  iec61970_color: "" {
+    style: {
+      fill: "#eccfcb"
+      stroke: black
+      stroke-width: 1
+    }
+    width: 10
+    height: 10
+  }
+  iec61970_text: "IEC61970 (Grid)" {
+    shape: text
+  }
+  iec62325_color: "" {
+    style: {
+      fill: "#fffbef"
+      stroke: black
+      stroke-width: 1
+    }
+    width: 10
+    height: 10
+  }
+  iec62325_text: "IEC62325 (Market)" {
+    shape: text
+  }
+}
+
+classes: {
+  grid: {
+    style: {
+      fill: "#eccfcb"
+      shadow: true
+    }
+  }
+  enterprise: {
+    style: {
+      fill: "#d1e7c2"
+      shadow: true
+    }
+  }
+  market: {
+    style: {
+      fill: "#fffbef"
+      shadow: true
+    }
+  }
+}
+
+direction: up
+
+Substation.class: grid
+VoltageLevel.class: grid
+BaseVoltage.class: grid
+PowerTransformer.class: grid
+PowerTransformerEnd.class: grid
+ConnectivityNode.class: grid
+Terminal.class: grid
+TopologicalNode.class: grid
+
+PowerTransformer -- Substation
+PowerTransformerEnd -- PowerTransformer
+PowerTransformerEnd -- BaseVoltage
+PowerTransformerEnd -- Terminal
+Terminal -- ConnectivityNode
+TopologicalNode -- Terminal
+TopologicalNode -- ConnectivityNode
+VoltageLevel -- Substation
+VoltageLevel -- BaseVoltage
+----
+
+Topology describes the structural arrangement of equipment within the
+electrical network. In this context, the model focuses on representing
+substations and the main elements that define voltage levels and connectivity
+between them. The aim is to provide just enough information for consistent
+representation of network hierarchy and interconnection points.
+
+== Core entities
+
+* Substation: represents the physical location where equipment is grouped.
+* VoltageLevel: partitions the substation according to operating voltage.
+* BaseVoltage: standard reference voltage associated with a voltage level.
+* PowerTransformer: equipment used to connect different voltage levels.
+* PowerTransformerEnd: describes the individual winding of a transformer.
+
+== Modelling choices
+
+* Each transformer is expressed through its PowerTransformer entity and
+associated PowerTransformerEnd elements.
+* Hierarchy is captured by linking VoltageLevel to BaseVoltage, ensuring
+consistent reference to nominal operating values.
+* Connectivity between transformer ends is represented through terminals. Two
+PowerTransformerEnd terminals are associated via a TopologyNode, establishing
+the link within the network model.
+* Each PowerTransformer instance may represent multiple physical transformers
+in the field, reflecting redundancy and aggregated modelling.
+* This abstraction supports grid security (N-1) planning, ensuring the model
+can reflect operation under the loss of one transformer while maintaining
+service continuity.

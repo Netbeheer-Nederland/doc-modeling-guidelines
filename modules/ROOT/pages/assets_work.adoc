@@ -1,0 +1,24 @@
+= Assets and Work Management
+
+This part of the model covers the relationship between assets and the work
+performed on them, including projects that drive network expansion. The focus
+is providing a structure for linking operational projects to capacity upgrades.
+
+== Core entities
+
+* Asset: represents the physical instance of equipment in the field.
+* WorkTask: a defined task carried out as part of a work activity.
+* Work: a collection of tasks, representing a cohesive body of work.
+* Project: groups together multiple work activities, typically for strategic
+objectives such as network reinforcement or expansion.
+
+== Modelling choices
+
+* The model distinguishes between function (e.g. PowerTransformer) and asset
+(e.g. Asset) to separate equipment functionality from their physical
+representation.
+* Each Asset is linked to a PowerTransformer, enabling the association of
+physical equipment with the functional topology.
+* WorkTask aggregates into Work, which in turn is organised under a Project.
+* This structure allows projects to be explicitly linked to assets, ensuring
+visibility of work undertaken to expand available transport capacity.

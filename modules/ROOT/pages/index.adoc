@@ -16,9 +16,9 @@ Grid Modelling Guidelines], published under the
 http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/[Open
 Government License]
 
-= Background
+== Background
 
-== Data Product
+=== Data Product
 
 In the context of the _Visie Datadelen_, the approach to data exchange has been
 explicitly framed in terms of _data products_. A data product integrates the
@@ -39,7 +39,7 @@ use of the data product.
 The data product combines the dataset and dataservice, enhanced with conditions
 for usage.
 
-== Common Information Model
+=== Common Information Model
 
 The _CIM_ is an information model that defines a common industry structure for a
 broad range of data critical to electric utilities, including grid model data.
@@ -121,3 +121,15 @@ enumerated data types (e.g., the cim:WindingConnection enumeration class
 defines possible values of D, Y, Z Yn, Zn, A using attributes). For the sake of
 brevity, the requirement descriptions below reference only the enumerated value
 names and not their class names.
+
+== Patterns
+
+The NBNL Profile Group defines a number of _patterns_ to model use cases. Each
+pattern can be used stand-alone, or combined with other patterns. The following
+patterns are defined:
+
+* xref::topology.adoc[]
+* xref::boundary_point.adoc[]
+* xref::congestion.adoc[]
+* xref::location.adoc[]
+* xref::assets_work.adoc[]

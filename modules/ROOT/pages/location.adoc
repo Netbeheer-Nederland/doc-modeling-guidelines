@@ -1,0 +1,33 @@
+= Location
+
+Location provides the link between network elements and the geographic or
+administrative areas they serve. This allows the model to connect electrical
+topology with zones of demand, supporting planning and analysis across
+different levels of spatial granularity.
+
+== Core entities
+
+* GeographicalRegion: high-level area used as a country indicator (e.g. NL).
+* SubGeographicalRegion: subdivision of a geographical region, used to denote
+the responsible system operator.
+* Zone: represents a spatial area; may correspond to a postal code region or a
+cbs:buurt (neighbourhood).
+* VoltageLevel: partitions a substation by operating voltage and can be linked
+to one or more zones.
+* WorkLocation: represents the spatial focus of planned or ongoing work
+activities, supporting geographically targeted programmes.
+
+== Modelling choices
+
+* A GeographicalRegion is used to identify the country in which the modelled
+data applies (e.g. NL).
+* Each SubGeographicalRegion represents a system operator’s area of
+responsibility within the country.
+* A VoltageLevel is associated with one or more Zone entities, enabling
+representation of postal code coverage and neighbourhoods.
+* A Zone may be defined as a cbs:buurt, providing alignment with external
+statistical or administrative boundaries.
+* Multiple VoltageLevel instances may supply a single Zone, reflecting
+dependency on topology and real-world distribution arrangements.
+* WorkLocation is linked to VoltageLevel and is used to capture work activities
+in the context of the _Buurtgebonden aanpak_ (neighbourhood-oriented programme).

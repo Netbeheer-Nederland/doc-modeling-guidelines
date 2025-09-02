@@ -1,0 +1,27 @@
+= Congestion
+
+Congestion represents situations where network equipment is operating at or
+near its limits. Modelling congestion explicitly allows the dataset to
+highlight where capacity is constrained and how such constraints propagate
+through the grid.
+
+== Core entities
+
+* Contingency: represents a condition or event that may lead to congestion,
+such as equipment outage or high demand.
+* ContingencyEquipment: links a contingency to specific items of equipment.
+* PowerTransformer: equipment that may be subject to congestion when
+associated with a contingency.
+
+== Modelling choices
+
+* ContingencyEquipment is used to associate a Contingency with a
+PowerTransformer, explicitly marking transformers under congestion.
+* This association allows data consumers to trace where congestion is present
+in the grid.
+* Congestion cascades through the network: once a transformer is marked as
+congested, the effect can be followed through the connected topology to
+understand its impact on zones and demand areas.
+* Representing congestion in this way supports planning and investment
+decisions, by making it possible to identify which parts of the grid require
+reinforcement or expansion.
