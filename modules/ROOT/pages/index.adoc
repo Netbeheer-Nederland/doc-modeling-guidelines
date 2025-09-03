@@ -1,5 +1,19 @@
 = Modeling Guidelines
 
+:description: This document describes the modeling guidelines for the NBNL Profile Group.
+:url-repo: https://github.com/Netbeheer-Nederland/doc-modeling-guidelines
+:domain: nbnl.info
+:version: v0.9
+:uri: https://{domain}/modeling-guidelines
+
+Author:: mailto:ritger.teunissen@alliander.com[Ritger Teunissen] (Alliander)
+//Editors::
+//mailto:ritger.teunissen@alliander.com[Ritger Teunissen] (Alliander) +
+//mailto:robbert.hardin@alliander.com[Robbert Hardin] (Alliander)
+Version:: {version}
+Feedback::
+https://github.com/Netbeheer-Nederland/doc-modeling-guidelines/issues[Issue on GitHub] (https://github.com/Netbeheer-Nederland/doc-modeling-guidelines[`Netbeheer-Nederland/doc-modeling-guidelines`])
+
 This document overviews the grid modelling approach and details the grid model
 data requirements for data supplied by Dutch transmission and distribution
 system operators.
