@@ -1,0 +1,105 @@
+= Background
+
+== Data Product
+
+In the context of the _Visie Datadelen_, the approach to data exchange has been
+explicitly framed in terms of _data products_. A data product integrates the
+semantic, technical, and usage aspects of data exchange. To facilitate this, a
+data product is composed of the following components:
+
+* _Dataset_: The actual data being exchanged. Think of a dataset as a table of
+data, where the columns describe the type of data provided for each row. For
+example, a dataset for connections will include, at a minimum, a column
+labelled "Connection Number," with each row describing a unique connection.
+* _Dataservice_: The technical method by which the dataset is distributed. This
+concerns how the data is made accessible, whether as a file, through an API,
+via a database, or on a file server.
+* _Conditions_: There may be conditions applied to aspects such as
+availability, quality, classification, and purpose limitation concerning the
+use of the data product.
+
+The data product combines the dataset and dataservice, enhanced with conditions
+for usage.
+
+== Common Information Model
+
+The _CIM_ is an information model that defines a common industry structure for a
+broad range of data critical to electric utilities, including grid model data.
+IEC CIM standards provide guidance on how the CIM information model can be used
+to enable data exchange. The CIM and the International Electrotechnical Commission (IEC)
+61970 family of standards provide the basis for the structure of the NBNL grid
+model data. The information model described in _IEC 61970-301:2022_ forms the
+foundation and _IEC 61970-600-1:2021_ and _IEC 61970-600-2:2021_ -together
+known as CGMES v3.0 (Common Grid Model Exchange Standard version 3.0)-
+describe CIM usage and profiles.
+
+While grid instance data are the main focus of this document, an understanding
+of how the constructs are used in the sharing of the NBNL grid model data is
+essential background, providing context for the requirements presented in this
+document.
+
+=== Extensions
+
+NBNL grid model data exchange, like most implementations of IEC CIM data
+exchange standards, has local requirements not addressed by the IEC standards.
+Because ongoing alignment with the IEC 61970 family of standards is key to the
+long-term usefulness of NBNL data, the NBNL data structure is expressed in
+terms of the underlying CIM, the CGMES v3.0 standards, and a set of
+NBNL-specific extensions and deviations.
+
+=== CIM conventions used in requirements definition
+
+The NBNL grid model data population requirements are described using references
+to objects based on CIM classes, attributes, and associations. A bit of
+background on CIM conventions is provided in this section to aid in
+understanding the descriptions.
+
+The basics:
+
+* An instance of a CIM class is identified by its CIM class name (e.g.,
+SynchronousMachine). In some cases, the word object is added after the class
+name for clarity (e.g., ”All Synchronous Machine objects have an associated
+RegulatingControl.”)
+* An attribute is identified by its CIM class and attribute name in the
+following form: <class name>.<attribute name> (e.g.,
+PowerTransformerEnd.connectionKind).
+* An association is identified by the CIM class name of the originating class
+and the role name of the association’s opposite end using the following
+notation: <class name>.<association end role name towards the referred class>
+(e.g., OperationalLimit.OperationalLimitType).
+
+CIM class and attribute names are prefaced with a 2- to 3-character
+abbreviation indicating the namespace of the information model in which the
+class or attribute is defined. While not strictly necessary for understanding
+the NBNL requirements, this additional piece of information provides the key to
+accessing the detailed descriptions for classes and attributes.
+
+* cim: means the class/attribute/association is defined in the underlying CIM
+information model defined in _IEC 61970-301_;
+* eu: means the class/attribute/association is defined in specific extensions
+normative for Europe which are also defined in _IEC 61970-301_;
+* nc: means in the class/attribute/association is defined in specific
+extensions for the implementation of EU Network Codes. These extensions are
+defined in the ENTSO-E document “Network codes canonical specification”;
+* nl: means the class/attribute/association is defined in specific extensions
+for the Netherlands.
+
+The CIM leverages the UML concept of class inheritance, where one class can be
+a "subtype" of another, inheriting all attributes and associations from its
+"supertype". This means that the <class name> portion of an attribute name may
+be the name of a "supertype" class (e.g., cim:Switch has an attribute called
+cim:Equipment.aggregate which it inherits from cim:Equipment). The same is true
+for associations (e.g., cim:PhaseTapChangerLinear has an association called
+cim:PhaseTapChanger.TransformerEnd which it inherits from cim:PhaseTapChanger).
+
+Inheritance also allows the explanations below to be kept as simple as
+possible, by allowing requirements to be phrased in terms of "subtype objects".
+For example, if a requirement applies to all five of the subtypes of
+cim:GeneratingUnit the text will refer to "all cim:GeneratingUnit subtype
+objects".
+
+The CIM approach to data modelling uses classes as the vehicle for defining
+enumerated data types (e.g., the cim:WindingConnection enumeration class
+defines possible values of D, Y, Z Yn, Zn, A using attributes). For the sake of
+brevity, the requirement descriptions below reference only the enumerated value
+names and not their class names.
