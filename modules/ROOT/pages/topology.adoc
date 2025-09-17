@@ -123,6 +123,8 @@ consistent reference to nominal operating values.
 * Connectivity between transformer ends is represented through terminals. Two
 PowerTransformerEnd terminals are associated via a TopologyNode, establishing
 the link within the network model.
+* PowerTransformers are associated with a VoltageLevel by associating the
+terminal of a PowerTransformerEnd with a ConnectivityNode in the VoltageLevel.
 * Each PowerTransformer instance may represent multiple physical transformers
 in the field, reflecting redundancy and aggregated modelling.
 * This abstraction supports grid security (N-1) planning, ensuring the model
