@@ -1,6 +1,7 @@
 * xref::background.adoc[]
-* xref::topology.adoc[]
-* xref::boundary_point.adoc[]
-* xref::congestion.adoc[]
-* xref::location.adoc[]
-* xref::assets_work.adoc[]
+* Patterns
+** xref::topology.adoc[]
+** xref::congestion.adoc[]
+** xref::boundary_point.adoc[]
+** xref::location.adoc[]
+** xref::assets_work.adoc[]
