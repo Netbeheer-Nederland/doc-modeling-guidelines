@@ -1,0 +1,228 @@
+= Points
+
+:doctype: article
+:encoding: utf-8
+:lang: en
+:toc: right
+:numbered!:
+:figure-caption!:
+:description: This document is part of the modeling guidelines for the NBNL Profile Group.
+:url-repo: https://github.com/Netbeheer-Nederland/doc-modeling-guidelines
+:domain: modellen.netbeheernederland.nl
+:uri: https://{domain}/modeling-guidelines/points
+:version: v0.5 concept
+
+Author:: mailto:ahagreis@netbeheernederland.nl[Arend Hagreis]
+//Editors::
+
+Version:: {version}
+Feedback:: https://github.com/Netbeheer-Nederland/doc-modeling-guidelines/issues[Issue on GitHub] (https://github.com/Netbeheer-Nederland/doc-modeling-guidelines[`Netbeheer-Nederland/doc-modeling-guidelines`])
+
+= Introduction
+This document is part of the grid modelling approach and details the grid model data requirements for data supplied by Dutch transmission and distribution system operators and describes in detail the following terms; *the MarketEvaluationPoint, Accountingpoint, Usagepoint, ExchangePoint, BoundaryPoint and ConnectionPoint.*
+
+These terms are used within the energy industry, particularly in standards like the IEC Common Information Model (CIM) and profiles like the European Style Market Profile (ESMP), to define specific roles and contexts for points in the electricity or natural gas network.
+
+== CIM classes
+.The described CIM classes (yellow) and specialisations with some of the direct related classes, like equipment and meter
+image::images/points.png[points]
+
+== Breakdown
+[cols="1,2,3"]
+|===
+| Term | Primary Focus | Role in the Energy System
+| ConnectionPoint __[Overdrachtspunt]__ | Technical grid interface | The physical location where a customer's installation or another network element connects to the distribution or transmission grid infrastructure.
+| UsagePoint __[Meetpunt]__ | Physical connection and metering | Identifies the physical location where energy is delivered to or consumed by a customer and the associated metering equipment.
+| MarketEvaluationPoint __[Aansluiting]__ | Commercial and regulatory | The specific entity (identified by a unique ID) used for market processes like billing, settlement, and data exchange. It ties technical data to commercial agreements.
+| AccountingPoint __[Allocatiepunt]__ | Financial settlement | A specific type of MarketEvaluationPoint used purely for financial settlement and accounting processes. It may cover volumes based on profiles or continuous measurement. Often used for internal tracking or specific regulatory reporting of energy flows at a high level.
+| BoundaryPoint __[Netkoppeling]__ | Network interface | A point that defines the border between two administrative or technical domains, such as between two Transmission System Operators (TSOs) or a TSO and a Distribution System Operator (DSO).
+| ExchangePoint __[Netkoppeling]__ | Market trading | A specific type of MarketEvaluationPoint (conceptual) representing where energy is traded or exchanged between market participants (e.g., at a power exchange) or where cross-border capacity is allocated in the market.	
+|===
+
+== Summary
+* *UsagePoint*, *ConnectionPoint* and *BoundaryPoint* are **primarily physical and technical concepts**.
+* **MarketEvaluationPoint**, **AccountingPoint**, and *ExchangePoint* are *commercial or financial concepts* used for market operations and data management.
+
+* Scope and Abstraction:
+** A *ConnectionPoint* is the precise physical interface with the grid.
+** A *UsagePoint* refers to the connection and its associated meter setup.
+** A *MarketEvaluationPoint* is the data identifier linked to a UsagePoint for administrative tasks (billing, market data flows).
+** An *AccountingPoint* is similar to a MarketEvaluationPoint but emphasizes the financial reporting aspect, especially for balance settlement areas or inter-utility transfers.
+** A *BoundaryPoint* is used to define the division of responsibility between two network operators.
+** An *ExchangePoint* is an abstract market concept for trading purposes, not a physical metering point in the grid itself. 
+
+In essence, you have physical locations (ConnectionPoint, UsagePoint) generating data, which is then managed through commercial identifiers (MarketEvaluationPoint, AccountingPoint) for market operations and financial settlement (ExchangePoint, BoundaryPoint). See also the example at the end op the page.
+
+= Market evaluation point
+====
+_cim:MarketEvalutationPoint, nbility:Aansluiting, nbnl:aansluiting, edsn:aansluiting_
+
+_based on: cim:UsagePoint_
+====
+
+== Definitions
+cim: A *MarketEvaluationPoint* is the identification of an entity where energy products are measured or computed.
+
+nbnl: Een *aansluiting* geeft recht op het gebruik van één of meer verbindingen tussen een energienet en een onroerende zaak (waarbij aansluitingen worden onderscheiden naar kleinverbruikaansluitingen en grootverbruikaansluitingen).
+
+== Description
+In the Common Information Model (CIM), a *MarketEvaluationPoint* is a location in the electrical network where energy is quantified for commercial purposes. It is the logical point at which market data, such as consumption, generation, or traded volumes, is evaluated and reconciled between different market participants. 
+
+=== Key aspects and purpose
+* **Commercial metering**: A MarketEvaluationPoint is where the metered data from a UsagePoint or ConnectionPoint is read and used for commercial operations like billing, invoicing, and settlements. This distinguishes it from the physical connection itself, which may not be a point for market evaluation.
+* **Unique identification**: In the European energy market, these points are often identified by a specific Market Evaluation Point Identifier (MEP ID), such as those issued by the European Network of Transmission System Operators for Electricity (ENTSO-E). Within the Dutch market, the DSO supplies this identifier based on an EAN18 code. This allows market participants to track energy flows reliably and unambiguously. 
+* **Reconciliation of data**: The MarketEvaluationPoint plays a crucial role in reconciling energy imbalances. For instance, when there is a mismatch between the energy that was bought and the energy that was actually consumed or produced at a location, the data from the MarketEvaluationPoint is used to settle the imbalance.
+* **Support for market processes**: The concept supports a range of energy market processes, including day-ahead and intraday trading, where it provides the foundational data for calculating traded volumes.
+
+=== MarketEvaluationPoint vs. other terms
+To clarify, here is how a MarketEvaluationPoint relates to other grid concepts:
+
+* **MarketEvaluationPoint vs. ConnectionPoint**: A ConnectionPoint is the physical or logical interface where an asset (eg. power-generating module/demand facility) connects to the grid and is defined for technical grid operations. The MarketEvaluationPoint takes the data collected from the grid at or near that ConnectionPoint and processes it for commercial market purposes.
+* **MarketEvaluationPoint vs. UsagePoint**: While a UsagePoint is where energy is used and potentially measured for billing purposes, a single facility might have a single ConnectionPoint to the grid but multiple UsagePoints for different billing needs. The MarketEvaluationPoint is the specific logical point for performing the market-related evaluation based on that consumption data. A single UsagePoint could be linked to one or more MarketEvaluationPoints (more; in case of aggregation of energyconsumers).
+* **MarketEvaluationPoint vs. ExchangePoint**: An ExchangePoint is a logical trading boundary between different market areas or zones (e.g., between two countries) and is used for market purposes. A MarketEvaluationPoint, however, is within a single market area, representing a location where consumption or generation is evaluated.
+* **MarketEvaluationPoint vs. AccountingPoint**: A MarketEvaluationPoint is the more general concept, representing any point where energy is quantified for market purposes. Examples include locations for measuring generation, consumption, or network losses. The AccountingPoint is a specific kind of MarketEvaluationPoint that is used to attribute energy volumes to a particular party for billing. An AccountingPoint typically has one responsible entity, like a Balance Responsible Party (BRP), assigned to it.
+
+= Connection point
+====
+_esmp:ConnectionPoint, nbnl:overdrachtspunt_
+
+_based on: cim:MarketEvaluationPoint_
+
+ EDSN:  nbnl:overdrachtspunt = esmp:exchangepoint
+====
+
+== Definitions
+esmp: According to the European Style Market Profile (ESMP) based on ENTSO-E's interpretation of the Common Information Model (CIM), a *ConnectionPoint* is the precise, physical or logical interface where an electrical asset—like a power plant, a demand facility, or a specific part of a network—is connected to the grid. 
+
+nbnl: Het *overdrachtspunt* is de overeengekomen grens waarop de verantwoordelijkheid overgaat van het energienet van de netbeheerder naar de installatie van de aangeslotene, of tussen twee energienetten
+
+== Description
+This term is defined in detail within the EU network codes, a set of rules that harmonize grid connection requirements across the European internal electricity market.
+
+=== Key aspects and purpose
+* **Identified in a connection agreement**: The specifics of a Connection Point are formalized in a legal document, the connection agreement, which outlines the technical and commercial conditions for connecting to the network.
+* **Supports grid connection codes**: The concept is integral to implementing the EU's network codes, which set common requirements for grid connections to ensure the stability and reliability of the interconnected European grid. 
+
+= Usage point
+====
+_cim:UsagePoint, nbnl:meetpunt/meetinrichting?_
+
+_based on: cim:IdentifiedObject_
+====
+
+== Definitions
+cim: A *UsagePoint* is the logical or physical point in the network to which meter readings or events may be attributed. Used at the place where a physical or virtual meter may be located; however, it is not required that a meter be present.
+
+ nbnl: todo!! meetpunt/meetinrichting[service delivery point (SDP)] instrument of samenstel van instrumenten met een meetfunctie dat ten minste de invoeding, onttrekking of het verbruik van elektriciteit of gas meet, met uitzondering van hulpmiddelen die de meetfunctie ondersteunen en die onderdeel zijn van een aansluiting
+
+== Description 
+UsagePoint is the class providing the link between the network-oriented model of electrically connected equipment on the one hand, and the asset and premises-oriented model of the metering domain on the other. The linkage can be realised through the relationship of UsagePoint with Equipment. 
+
+The UsagePoint is fundamental for a wide range of energy management and smart grid applications, including:
+
+* **Billing and invoicing**: Linking energy consumption readings to specific customer accounts.
+* **Asset management**: Keeping track of meters and other devices installed at a specific location.
+* **Grid analysis**: Providing data for analyzing energy flows and planning distribution network upgrades.
+* **Data aggregation**: 
+** One or more UsagePoints may represent aggregated EnergyConsumers. 
+** Creating virtual/dynamically UsagePointGroups to combine readings from related physical locations, like all premises belonging to a single company. 
+
+=== Key aspects and purpose
+* **Logical or physical point**: A UsagePoint can be a tangible location, such as a house where a meter is installed, or a virtual one used for aggregating energy data from multiple locations.
+* **Distinct from a meter**: While a meter is often located at a UsagePoint, the two are not the same. The UsagePoint is the conceptual location where energy is consumed or produced, while the meter is the physical device that performs the measurement.
+* **Supports complex use cases**: A UsagePoint can represent more than just a simple residential meter. For example, it can define the point where energy is generated by a distributed resource or where the service ownership changes hands.
+* **Attribute-rich**: The UsagePoint class can contain various attributes, including:
+
+** __Phase code__: Describes the electrical phases at the point (e.g., single-phase, three-phase).
+
+** __Connection category__: Details the type of connection, such as low voltage or low pressure.
+
+** __Inverter capacity__: Specifies the approved inverter capacity for generation at the point.
+
+** __Pricing structure__: Links to applicable pricing and tariff information for the energy service.
+
+** __Location data__: Associated with a UsagePointLocation object to provide geographical coordinates and defines the physical location
+
+= Accounting point
+====
+_esmp:AccountingPoint, nbnl:allocatiepunt, edsn:allocatiepunt_
+
+_based on: cim:MarketEvaluationPoint_
+====
+
+== Definitions
+esmp: An *accountingpoint* is administrative point where Energy Supplier change can take place and for which commercial business processes are defined.
+
+nbnl: Een *allocatiepunt* is een administratief punt waar energie-uitwisseling wordt toegerekend aan een marktdeelnemer
+
+== Description
+An ESMP (Energy Service Management Platform) Accounting Point is a unique identifier for a specific measurement point in a power grid where energy flows (production or consumption) are recorded and measured. It serves as the reference point for energy suppliers to reconcile volumes and settle imbalances, and it can have one or more energy suppliers associated with it. The Accounting Point is uniquely identified by a Market Evaluation Point / mRID (master resource identifier). 
+
+=== Key aspects and purpose
+* **Measurement and Reconciliation**: 
+It is the location where validated measured data for energy production or consumption is collected. This data is used for settling energy volumes and balancing the grid.
+* **Unique Identification**: 
+Each Accounting Point has a unique identifier, often a master resource identifier (mRID), which is issued by an authorized office.
+* **Energy Supplier Association**: 
+It is associated with an Energy Supplier who delivers or takes electricity from the grid at that point.
+* **Imbalance Settlement**: 
+It is central to the imbalance settlement process, as the volumes recorded at the Accounting Point are reconciled against profiled volumes.
+* **Sub-Accounting Points**: (Secundary & Virtual) Allocation Points (SAP&VAP)
+If more than one energy supplier is needed at a single Accounting Point, it can be divided into sub-accounting points, which are treated as normal Accounting Points. 
+
+
+= Exchange point
+====
+_esmp:ExchangePoint, edsn:overdrachtspunt, nbnl:netkoppeling_
+
+_based on: cim:MarketEvaluationPoint_
+====
+
+== Definitions
+esmp: an *ExchangePoint* is a logical point in the power network representing where energy can be exchanged. 
+
+ nbnl: waar zit het verschil met een boundarypoint en is dit gelijk aan een netkoppeling?
+
+
+== Description
+This concept is crucial for managing cross-border electricity flows and facilitating market coupling across Europe. 
+
+=== Key aspects and purpose
+* **Logical vs. physical**: Similar to a UsagePoint, an ExchangePoint is a logical representation rather than a physical device. It marks the point where different market actors or transmission system operators (TSOs) come together to trade energy.
+* **Market coupling**: In Europe's integrated energy market, ExchangePoints are used to manage the flow of electricity between national grids, ensuring that electricity is distributed efficiently across the continent.
+* **Used in market processes**: Data related to ExchangePoints is used by market operators to carry out day-ahead and intraday trading, where supply and demand are balanced and prices are established for energy delivery.
+* **Facilitates balancing**: Market players use information from ExchangePoints to manage their energy positions and avoid imbalances.
+
+= Boundary point
+====
+_eu:BoundaryPoint, cim:ConnectivityNode, cim:TopologicalNode, nbnl:netkoppeling_
+
+_based on: cim:PowerSystemResource_
+====
+
+== Definitions
+eu: Designates a connection point at which one or more model authority sets shall connect to. The location of the connection point as well as other properties are agreed between organisations responsible for the interconnection, hence all attributes of the class represent this agreement. It is primarily used in a boundary model authority set which can contain one or many BoundaryPoints among other Equipments and their connections.
+
+ nbnl: netkoppeling
+
+== Description
+Based on ENTSO-E standards, a Boundary Point is a connection point between two distinct "Model Authority Sets" (MAS) within the Common Grid Model Exchange Specification (CGMES). A MAS represents a part of the power system model, typically maintained by a single Transmission System Operator (TSO).
+
+Essentially, the boundary point represents the location where networks from two different TSOs' or a TSO and DSO (Distribution Service Operator) connect and interact. 
+
+Boundary points are also relevant at an international level. For instance, market coupling in Europe links the day-ahead markets of different countries by treating their inter-country connections as boundary points, allowing for the exchange of electricity and the equalization of prices across connected regions. 
+
+= Example: A single site with different accounting needs
+====
+Consider a large industrial facility that both consumes energy from the grid and generates some of its own power, for example with a rooftop solar installation.
+
+* There would be a *ConnectionPoint* where the facility physically connects to the electrical grid.
+* This connection would include several *UsagePoint* meters: one for overall consumption and another for the solar generation.
+* The data from these *UsagePoint* meters would be channeled to two distinct *AccountingPoint* records:
+** One *AccountingPoint* for the energy consumed from the grid, assigned to the industrial customer's Balance Responsible Party (BRP).
+** A separate *AccountingPoint* for the energy produced by the solar panels, which might be assigned to a different BRP if the surplus power is sold back to the market.
+*	Both of these *AccountingPoint* records are specific instances of the broader *MarketEvaluationPoint* concept, as they both serve to evaluate energy for market settlement. 
+
+In this way, the *MarketEvaluationPoint* acts as the umbrella term for any logical market measurement point, while the *AccountingPoint* is the more specialized object specifically focused on the commercial and financial settlement process for energy consumed or produced at a location. 
+====
+ 
