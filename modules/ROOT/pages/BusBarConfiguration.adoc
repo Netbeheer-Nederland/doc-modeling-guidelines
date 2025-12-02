@@ -1,0 +1,72 @@
+= BusbarConfigurations
+
+:doctype: article
+:encoding: utf-8
+:lang: en
+:toc: right
+:numbered!:
+:figure-caption!:
+:description: This document describes the BusbarConfigurations as part of the modeling guidelines for the NBNL Profile Group.
+:url-repo: https://github.com/Netbeheer-Nederland/doc-modeling-guidelines
+:domain: modellen.netbeheernederland.nl
+:uri: https://{domain}/modeling-guidelines/busbarconfiguration
+:version: v0.9 concept
+
+Author:: mailto:ahagreis@netbeheernederland.nl[Arend Hagreis]
+//Editors::
+
+Version:: {version}
+Feedback:: https://github.com/Netbeheer-Nederland/doc-modeling-guidelines/issues[Issue on GitHub] (https://github.com/Netbeheer-Nederland/doc-modeling-guidelines[`Netbeheer-Nederland/doc-modeling-guidelines`])
+
+== Introduction
+This document is part of the grid modelling approach and details the grid model data requirements for data supplied by Dutch transmission and distribution system operators and describes in detail the *Busbar Configuration*
+
+These terms are used within the energy industry, particularly in standards like the IEC Common Information Model (CIM) and profiles like the European Style Market Profile (ESMP).
+
+== BusbarConfiguration
+
+The *BusbarConfiguration* defines the possible layouts for the usage of busbars in a VoltageLevel but because this can differ per Bay, the enumeration (see below) is at the Bay level. .
+
+It is an enumeration type with values like: 
+
+* doubleBus
+* mainWithTransfer
+* ringBus
+* singleBus
+
+
+== Description of the different configurations:
+
+=== 1. SingleBus
+
+•	Structure: One single busbar to which all circuits are connected.
+•	Function: Simplest and most economical arrangement; Maintenance requires complete shutdown.
+•	Advantages: Low cost and easy to operate.
+•	Disadvantages: No redundancy; if the bus fails, the entire system goes down.
+
+=== 2. MainWithTransfer
+
+Is a configuration layout where there is a main bus and an additional transfer bus. The transfer bus is typically used to temporarily carry load or equipment when the main bus is under  maintenance or fault conditions. This configuration improves operational flexibility and reliability, allowing switching operations without interrupting service.
+
+•	Structure: One main bus and one transfer bus.
+•	Function: Transfer bus is used temporarily during maintenance or fault conditions.
+•	Advantages: Maintenance possible without full outage.
+•	Disadvantages: Limited flexibility; transfer bus cannot carry full load permanently.
+
+=== 3. DoubleBus
+
+•	Structure: Two main buses (Bus A and Bus B) with switching capability.
+•	Function: Circuits can be connected to either bus for redundancy (n-1).
+•	Advantages: High reliability and operational flexibility; Maintenance without service interruption since one bus can remain energized.
+•	Disadvantages: High cost and more complex operation.
+
+=== 4. RingBus
+
+•	Structure: Bus arranged in a ring, with each circuit between two breakers.
+•	Function: Power can flow in two directions; if one breaker is out, the ring still carries load.
+•	Advantages: Excellent reliability and continuity of service; Any breaker can be removed without outage.
+•	Disadvantages: Complex protection schemes and higher cost and space requirements.
+
+
+
+
