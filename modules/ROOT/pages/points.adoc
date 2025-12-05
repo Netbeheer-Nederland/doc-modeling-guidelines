@@ -24,8 +24,207 @@ This document is part of the grid modelling approach and details the grid model 
 These terms are used within the energy industry, particularly in standards like the IEC Common Information Model (CIM) and profiles like the European Style Market Profile (ESMP), to define specific roles and contexts for points in the electricity or natural gas network.
 
 == CIM classes
-.The described CIM classes (yellow) and specialisations with some of the direct related classes, like equipment and meter
-image::images/points.png[points]
+[d2,svg,theme=4]
+----
+
+title: Points {
+  near: top-center
+  shape: text
+  style: {
+    font-size: 48
+    bold: true
+  }
+}
+
+vars: {
+  d2-config: {
+    pad: 20
+  }
+}
+
+#
+# Layout
+#
+grid-rows: 7
+grid-columns: 6
+
+vertical-gap: 80
+horizontal-gap: 160
+
+#
+# Classes
+#
+classes: {
+  *: {
+    style: {
+      shadow: true
+      border-radius: 0
+      stroke-width: 2
+      stroke: black
+      fill: lightgray
+      font-color: black
+    }
+  }
+  default
+  hidden: {style.opacity: 0}
+  eu: {
+    style.stroke: green
+    style.fill: lightgreen
+  }
+  cim: {
+    style.stroke: blue
+    style.fill: lightcyan
+  }
+  esmp: {
+    style.stroke: red
+    style.fill: lightcoral
+  }
+}
+
+#
+# Added .shape: rectangle to 'activate' classes after overwriting it with MarkDown
+#
+1_1.class: hidden
+1_2.class: hidden
+1_3.class: hidden
+1_4.class: hidden
+"PSR".shape: rectangle
+1_6.class: hidden
+
+2_1.class: hidden
+2_2.class: hidden
+2_3.class: hidden
+2_4.class: hidden
+"BP".shape: rectangle
+"CN".shape: rectangle
+
+3_1.class: hidden
+3_2.class: hidden
+3_3.class: hidden
+3_4.class: hidden
+3_5.class: hidden
+3_6.class: hidden
+
+4_1.class: hidden
+4_2.class: hidden
+"Eq".shape: rectangle
+"UP".shape: rectangle
+"ED".shape: rectangle
+4_6.class: hidden
+
+"Mmt".shape: rectangle
+"T".shape: rectangle
+"CEq".shape: rectangle
+5_4.class: hidden
+"Mtr".shape: rectangle
+"MR".shape: rectangle
+
+6_1.class: hidden
+6_2.class: hidden
+"EC".shape: rectangle
+6_4.class: hidden
+6_5.class: hidden
+6_6.class: hidden
+
+7_1.class: hidden
+7_2.class: hidden
+7_3.class: hidden
+"MEP".shape: rectangle
+7_5.class: hidden
+7_6.class: hidden
+
+8_1.class: hidden
+8_2.class: hidden
+"CP".shape: rectangle
+"EP".shape: rectangle
+"AP".shape: rectangle
+8_6.class: hidden
+
+"BP" -> "PSR"
+"BP" -- "CN"
+
+"EQ" -> "PSR"
+"EQ" -- "UP"
+"UP" -- "ED"
+
+"Mmt" -- "T"
+"T" -- "CEq"
+"CEq" -> "Eq"
+"MEP" -> "UP"
+"Mtr" -> "ED"
+"Mtr" -- "MR"
+
+"EC" -> "CEq"
+
+"CP" -> "MEP"
+"EP" -> "MEP"
+"AP" -> "MEP"
+
+AP: "esmp:AccountingPoint" {class: esmp}
+BP: |md [eu:BoundaryPoint](https://netbeheer-nederland.github.io/im-cgmes/Core%20Equipment/BoundaryPoint/) | {class: eu}
+CEq: |md [ConductingEquipment](https://netbeheer-nederland.github.io/docs/im-tc57cim/latest/schema/class/ConductingEquipment.html) | {class: default}
+CN: |md [ConnectivityNode](https://netbeheer-nederland.github.io/docs/im-tc57cim/v1.0.0/schema/class/ConnectivityNode.html) | {class: default}
+CP: "esmp:ConnectionPoint" {class: esmp}
+EC: |md [EnergyConsumer](https://netbeheer-nederland.github.io/docs/im-tc57cim/latest/schema/class/EnergyConsumer.html) | {class: default}
+ED: |md [EndDevice](https://netbeheer-nederland.github.io/docs/im-tc57cim/latest/schema/class/EndDevice.html) | {class: default}
+EP: "esmp:ExchangePoint" {class: esmp}
+Eq: |md [Equipment](https://netbeheer-nederland.github.io/docs/im-tc57cim/latest/schema/class/Equipment.html) | {class: default}
+MEP: |md [cim:MarketEvaluationPoint](https://netbeheer-nederland.github.io/docs/im-tc57cim/latest/schema/class/MarketEvaluationPoint.html) | {class: cim}
+MR: |md [MeterReading](https://netbeheer-nederland.github.io/docs/im-tc57cim/latest/schema/class/MeterReading.html) | {class: default}
+Mmt: |md [Measurement](https://netbeheer-nederland.github.io/docs/im-tc57cim/latest/schema/class/Measurement.html) | {class: default}
+Mtr: |md [Meter](https://netbeheer-nederland.github.io/docs/im-tc57cim/latest/schema/class/Meter.html) | {class: default}
+PSR: |md [PowerSystemResource](https://netbeheer-nederland.github.io/docs/im-tc57cim/v1.0.0/schema/class/PowerSystemResource.html) | {class: default}
+T: |md [Terminal](https://netbeheer-nederland.github.io/docs/im-tc57cim/latest/schema/class/Terminal.html) | {class: default}
+UP: |md [cim:UsagePoint](https://netbeheer-nederland.github.io/docs/im-tc57cim/latest/schema/class/UsagePoint.html) | {class: cim}
+
+legend: "" {
+  style: {
+    fill: transparent
+    stroke: transparent
+  }
+  grid-rows: 3
+  grid-columns: 2
+  grid-gap: 10
+  near: bottom-right
+  eu_color: "" {
+    style: {
+      fill: lightgreen
+      stroke: green
+      stroke-width: 1
+    }
+    width: 10
+    height: 10
+  }
+  eu_text: "CGMES (eu)" {
+    shape: text
+  }
+  cim_color: "" {
+    style: {
+      fill: lightcyan
+      stroke: blue
+      stroke-width: 1
+    }
+    width: 10
+    height: 10
+  }
+  cim_text: "CIM" {
+    shape: text
+  }
+  esmp_color: "" {
+    style: {
+      fill: lightcoral
+      stroke: red
+      stroke-width: 1
+    }
+    width: 10
+    height: 10
+  }
+  esmp_text: "ESMP" {
+    shape: text
+  }
+}
+
+----
 
 == Breakdown
 [cols="1,2,3"]
