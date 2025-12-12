@@ -47,3 +47,4 @@ patterns are defined:
 * xref::location.adoc[]
 * xref::assets_work.adoc[]
 * xref::busbarconfigurations.adoc[]
+* xref::points.adoc[]
