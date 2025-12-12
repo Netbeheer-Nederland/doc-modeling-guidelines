@@ -46,4 +46,4 @@ patterns are defined:
 * xref::congestion.adoc[]
 * xref::location.adoc[]
 * xref::assets_work.adoc[]
-* xref::busbarconfigurations.adoc[]
+* xref::busbarconfiguration.adoc[]
