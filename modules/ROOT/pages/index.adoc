@@ -43,6 +43,7 @@ patterns are defined:
 
 * xref::topology.adoc[]
 * xref::boundary_point.adoc[]
+* xref::points.adoc[]
 * xref::congestion.adoc[]
 * xref::location.adoc[]
 * xref::assets_work.adoc[]
