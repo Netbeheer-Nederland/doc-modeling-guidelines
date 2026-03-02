@@ -6,3 +6,4 @@
 ** xref::location.adoc[]
 ** xref::assets_work.adoc[]
 ** xref::busbarconfiguration.adoc[]
+** xref::connectivity.adoc[]

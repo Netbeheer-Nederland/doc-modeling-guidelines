@@ -1,0 +1,38 @@
+= Connectivity in CIM
+
+Connectivity in CIM explained using  https://netbeheer-nederland.github.io/docs/im-tc57cim/latest/schema/class/Terminal.html[Terminal]  and  https://netbeheer-nederland.github.io/docs/im-tc57cim/latest/schema/class/ConnectivityNode.html[ConnectivityNode] conforms their definition in https://netbeheer-nederland.github.io/docs/im-tc57cim/latest/index.html[TC57CIM v1.1.0]
+
+== Terminal
+An AC electrical connection point to a piece of conducting equipment. Terminals are connected at physical connection points called connectivity nodes.
+
+https://netbeheer-nederland.github.io/docs/im-tc57cim/latest/schema/class/Terminal.html[Terminal] 
+
+== ConectivityNode
+Connectivity nodes are points where terminals of AC conducting equipment are connected together with zero impedance.
+
+https://netbeheer-nederland.github.io/docs/im-tc57cim/latest/schema/class/ConnectivityNode.html[ConnectivityNode]
+
+Note that cim:ConnectivityNode objects are the means by which connectivity is described in CIM and a typical grid model has many cim:ConnectivityNode objects. [14@LTDS]
+
+== ConductingEquipment
+The parts of the AC power system that are designed to carry current or that are conductively connected through terminals.
+
+https://netbeheer-nederland.github.io/docs/im-tc57cim/latest/schema/class/ConductingEquipment.html[ConductingEquipment]
+
+So, also parts of the AC power system that are _not_ designed to carry current but that are conductively connected through terminals ar _by definition_ Conducting Equipments. Are there any examples? Maybe Breaker objects ? [15@LTDS] According to its https://netbeheer-nederland.github.io/docs/im-tc57cim/v1.0.0/schema/class/Breaker.html[class hierarchy TC57CIM] it is. A Breaker is a ProtectedSwitch is a Switch is a ConductingEquipment. A Breaker carries current, but not constantly. More generally a Switch fits the bil.
+
+== Questions
+
+- Two CEs connected by one T. Is this possible?
+- Two CEs connected by two Ts. Default situation?
+- Two CEs connected by more than two Ts. Is this posible? Examples?
+
+== LTDS pdf
+
+https://www.ofgem.gov.uk/sites/default/files/2024-04/LTDS%20Grid%20Modelling%20Annex%201%20-%20Grid%20Modelling%20Guidelines.pdf[Grid Modelling Annex 1: Grid Modelling Guidelines.pdf (20240430)]
+
+This is the most recent version of _Grid Modelling Guidelines_. It contains 20 pages more. But I don't expect to see any major differences. The most important part is _Physical modelling_ [4.3]
+
+=== CIM, RDFS and ShaCL
+Machine-readable CIM-based data exchanges are described using both RDFS profiles and SHACL-based constraints. RDFS profiles define the structure of the exchanged data (i.e. the vocabulary) - classes, attributes, associations, and cardinalities. SHACL-based constraints (SHACL constraints) define rules related to the data content - more complex requirements which describe allowed or required instances, values and patterns. (See the 3.4 Constraints section of https://www.ofgem.gov.uk/sites/default/files/2024-04/LTDS%20Grid%20Modelling%20Annex%202%20-%20Data%20Exchange%20Specifications.pdf[LTDS Grid Modelling Annex 2 - Data Exchange Specifications] for more detail on the differences between profiles and constraints.)
+
