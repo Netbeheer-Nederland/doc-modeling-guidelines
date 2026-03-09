@@ -1,0 +1,102 @@
+= Connectivity in CIM
+
+:doctype: article
+:encoding: utf-8
+:lang: en
+:toc: right
+:numbered!:
+:figure-caption!:
+:description: This document is part of the modeling guidelines for the NBNL Profile Group.
+:url-repo: https://github.com/Netbeheer-Nederland/doc-modeling-guidelines
+:domain: modellen.netbeheernederland.nl
+:uri: https://{domain}/modeling-guidelines/points
+:version: v0.1 concept
+
+Author:: mailto:robbert.hardin@alliander.com[Robbert Hardin] (Alliander)
+//Editors::
+//mailto:ritger.teunissen@alliander.com[Ritger Teunissen] (Alliander) +
+//mailto:ritger.teunissen@alliander.com[Ritger Teunissen] (Alliander)
+
+Version:: {version}
+
+Feedback::
+https://github.com/Netbeheer-Nederland/doc-modeling-guidelines/issues[Issue on GitHub] (https://github.com/Netbeheer-Nederland/doc-modeling-guidelines[`Netbeheer-Nederland/doc-modeling-guidelines`])
+
+== Introduction
+This document is part of the grid modelling approach and details the grid model data requirements for data supplied by Dutch transmission and distribution system operators and describes in detail the following terms; *the MarketEvaluationPoint, Accountingpoint, Usagepoint, ExchangePoint, BoundaryPoint and ConnectionPoint.*
+
+== Connectivity in words
+
+An AC power system consistss of conducting equipment designed to carry current. They are connected through terminals who are connected to a conducting equipment object by its connectivity node:
+
+(CE) --has-- (CN) --connectable by-- (T).
+
+A connectivty node is also the way to connect two conducting equipment objects by their terminals:
+
+(CE_1)--(CN_1)--(T_1) --connects to connecting connectivity node--(CN)--connects to terminal of conducting equipement-- (T_2)--(CN_2)--(CE_2)
+
+== Connectivity in diagrams
+
+[d2,svg,theme=4]
+----
+
+title: Connectivity in CIM {
+  near: top-center
+  shape: text
+  style: {
+    font-size: 48
+    bold: true
+  }
+}
+
+vars: {
+  d2-config: {
+    pad: 20
+  }
+}
+
+direction: right
+
+EP
+EPCN
+CN
+
+EP -- EPCN: has
+EPCN -- CN: has
+
+----
+
+== Connectivy by definition
+
+=== ConductingEquipment
+The parts of the AC power system that are designed to carry current or that are conductively connected through terminals.
+
+https://netbeheer-nederland.github.io/docs/im-tc57cim/latest/schema/class/ConductingEquipment.html[ConductingEquipment]
+
+=== ConectivityNode
+Connectivity nodes are points where terminals of AC conducting equipment are connected together with zero impedance.
+
+https://netbeheer-nederland.github.io/docs/im-tc57cim/latest/schema/class/ConnectivityNode.html[ConnectivityNode]
+
+=== Terminal
+An AC electrical connection point to a piece of conducting equipment. Terminals are connected at physical connection points called connectivity nodes.
+
+https://netbeheer-nederland.github.io/docs/im-tc57cim/latest/schema/class/Terminal.html[Terminal] 
+
+
+== Connectivity in use
+
+When you connect several conducting equipment objects there into a string, there are two possibilities:
+
+1. There is no energy consumption. +
+In this case you can simplify your model and your grid calculations by replacing this string of conducting equipment objects by a topological node. Thsi will change your model from a connectivity (node-breaker )model into a toplogical (bus-branch) model. 
+
+2. There is energy consumption. +
+In this case you can add metering devices to your terminal to measure the energy consumption and bill the energy consumer.
+
+---
+
+This document includes text from the https://www.ofgem.gov.uk/decision/long-term-development-statement-direction[LTDS Grid Modelling Guidelines], published under the http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/[Open Government License]
+
+
+
