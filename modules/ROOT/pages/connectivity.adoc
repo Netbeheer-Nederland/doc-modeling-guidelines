@@ -1,4 +1,4 @@
-= Connectivity in CIM
+= Connectivity
 
 :doctype: article
 :encoding: utf-8
@@ -23,7 +23,7 @@ Feedback::
 https://github.com/Netbeheer-Nederland/doc-modeling-guidelines/issues[Issue on GitHub] (https://github.com/Netbeheer-Nederland/doc-modeling-guidelines[`Netbeheer-Nederland/doc-modeling-guidelines`])
 
 == Introduction
-This document is part of the grid modelling approach and details the grid model data requirements for data supplied by Dutch transmission and distribution system operators and describes in detail the following terms; *the MarketEvaluationPoint, Accountingpoint, Usagepoint, ExchangePoint, BoundaryPoint and ConnectionPoint.*
+This document is part of the grid modelling approach and details the grid model data requirements for data supplied by Dutch transmission and distribution system operators and describes in detail the following terms; *ConductingEquipment, ConnectivityNode, Terminal, TopoolodicalNode.*
 
 == Connectivity in words
 
@@ -57,12 +57,12 @@ vars: {
 
 direction: right
 
-EP
-EPCN
+CE
 CN
+T
 
-EP -- EPCN: has
-EPCN -- CN: has
+CE -- CN: has
+CN -- T: connectable by
 
 ----
 
@@ -83,13 +83,18 @@ An AC electrical connection point to a piece of conducting equipment. Terminals 
 
 https://netbeheer-nederland.github.io/docs/im-tc57cim/latest/schema/class/Terminal.html[Terminal] 
 
+=== TopologicalNode
+For a detailed substation model a topological node is a set of connectivity nodes that, in the current network state, are connected together through any type of closed switches, including jumpers. Topological nodes change as the current network state changes (i.e., switches, breakers, etc. change state). For a planning model, switch statuses are not used to form topological nodes. Instead they are manually created or deleted in a model builder tool. Topological nodes maintained this way are also called "busses".
+
+https://netbeheer-nederland.github.io/docs/im-tc57cim/latest/schema/class/TopologicalNode.html[TopologicalNode]
+
 
 == Connectivity in use
 
 When you connect several conducting equipment objects there into a string, there are two possibilities:
 
 1. There is no energy consumption. +
-In this case you can simplify your model and your grid calculations by replacing this string of conducting equipment objects by a topological node. Thsi will change your model from a connectivity (node-breaker )model into a toplogical (bus-branch) model. 
+In this case you can simplify your model and your grid calculations by replacing this string of conducting equipment objects by a topological node. This will change your model from a connectivity (node-breaker )model into a toplogical (bus-branch) model. 
 
 2. There is energy consumption. +
 In this case you can add metering devices to your terminal to measure the energy consumption and bill the energy consumer.
