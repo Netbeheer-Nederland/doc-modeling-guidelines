@@ -40,11 +40,11 @@ A connectivty node is also the way to connect two conducting equipment objects b
 [d2,svg,theme=4]
 ----
 
-title: Connectivity in CIM {
+title: Terminal connected by ConnectivityNode \nto ConductingEquipment {
   near: top-center
   shape: text
   style: {
-    font-size: 48
+    font-size: 24
     bold: true
   }
 }
@@ -57,14 +57,78 @@ vars: {
 
 direction: right
 
-CE
-CN
-T
+CE: {
+  shape: circle
+  label: CE # "Conducting\nEquipment"
+}
+CN: {
+  shape: circle
+  label: CN # "Connectivity\nNode"
+}
+T: {
+  shape: circle
+  label: T # "Terminal\n "
+}
 
 CE -- CN: has
 CN -- T: connectable by
 
 ----
+
+[d2,svg,theme=4]
+----
+
+title: Two ConductingEquipments connected \n by a ConnectivityNode {
+  near: top-center
+  shape: text
+  style: {
+    font-size: 24
+    bold: true
+  }
+}
+
+vars: {
+  d2-config: {
+    pad: 20
+  }
+}
+
+direction: right
+
+CE1: {
+  shape: circle
+  label: CE_1 # "Conducting\nEquipment"
+}
+CE2: {
+  shape: circle
+  label: CE_2 # "Conducting\nEquipment"
+}
+CN: {
+  shape: circle
+  label: CN # "Connectivity\nNode"
+}
+CN1: {
+  shape: circle
+  label: CN_1 # "Connectivity\nNode"
+}
+CN2: {
+  shape: circle
+  label: CN_2 # "Connectivity\nNode"
+}
+T1: {
+  shape: circle
+  label: T_1 # "Terminal\n "
+}
+T2: {
+  shape: circle
+  label: T_2 # "Terminal\n "
+}
+
+CE1 -- CN1 -- T1 -- CN -- T2 -- CN2 -- CE2
+
+----
+
+---
 
 == Connectivy by definition
 
@@ -98,6 +162,209 @@ In this case you can simplify your model and your grid calculations by replacing
 
 2. There is energy consumption. +
 In this case you can add metering devices to your terminal to measure the energy consumption and bill the energy consumer.
+
+---
+
+== Examples 
+
+=== Bus and bus group
+
+In CIM, a busbar section is modelled with a https://netbeheer-nederland.github.io/docs/im-tc57cim/latest/schema/class/BusbarSection.html[BusbarSection] object associated via its https://netbeheer-nederland.github.io/docs/im-tc57cim/latest/schema/class/Terminal.html[Terminal]  to a https://netbeheer-nederland.github.io/docs/im-tc57cim/latest/schema/class/ConnectivityNode.html[ConnectivityNode] object.
+
+[d2,svg,theme=4]
+----
+
+title: Bus and bus group {
+  near: top-center
+  shape: text
+  style: {
+    font-size: 24
+    bold: true
+  }
+}
+
+vars: {
+  d2-config: {
+    pad: 20
+  }
+}
+
+direction: right
+
+BS: {
+  shape: circle
+  label: "BusbarSection"
+}
+CN: {
+  shape: circle
+  label: "Connectivity\nNode"
+}
+T: {
+  shape: circle
+  label: "Terminal\n "
+}
+
+BS <- T -> CN
+
+----
+
+Alternative - square
+
+[d2,svg,theme=4]
+----
+
+title: Bus and bus group {
+  near: top-center
+  shape: text
+  style: {
+    font-size: 24
+    bold: true
+  }
+}
+
+vars: {
+  d2-config: {
+    pad: 20
+  }
+}
+
+direction: right
+
+BS: {
+  shape: square
+  label: "BusbarSection"
+}
+CN: {
+  shape: square
+  label: "Connectivity\nNode"
+}
+T: {
+  shape: square
+  label: "Terminal\n "
+}
+
+BS <- T -> CN
+
+----
+
+Alternative - square, top down
+
+[d2,svg,theme=4]
+----
+
+title: Bus and bus group {
+  near: top-center
+  shape: text
+  style: {
+    font-size: 24
+    bold: true
+  }
+}
+
+vars: {
+  d2-config: {
+    pad: 20
+  }
+}
+
+direction: down
+
+BS: {
+  shape: square
+  label: "BusbarSection"
+}
+CN: {
+  shape: square
+  label: "Connectivity\nNode"
+}
+T: {
+  shape: square
+  label: "Terminal\n "
+}
+
+BS <- T -> CN
+
+----
+
+=== Switching device
+
+In CIM, a circuit breaker is modelled with a https://netbeheer-nederland.github.io/docs/im-tc57cim/latest/schema/class/Breaker.html[Breaker] object
+
+[d2,svg,theme=4]
+----
+
+title: Switching device - Breaker {
+  near: top-center
+  shape: text
+  style: {
+    font-size: 24
+    bold: true
+  }
+}
+
+vars: {
+  d2-config: {
+    pad: 20
+  }
+}
+
+direction: down
+
+B: {
+  shape: square
+  label: "Breaker"
+}
+T1: {
+  shape: square
+  label: "Terminal 1\n "
+}
+T2: {
+  shape: square
+  label: "Terminal 2\n "
+}
+
+T1 -> B <- T2
+
+----
+
+A non-breaker switching device, e.g., a disconnector, is modelled using a https://netbeheer-nederland.github.io/docs/im-tc57cim/latest/schema/class/Disconnector.html[Disconnector] object.
+
+[d2, svg, theme=4]
+----
+
+title: Switching device - Disconnector {
+  near: top-center
+  shape: text
+  style: {
+    font-size: 24
+    bold: true
+  }
+}
+
+vars: {
+  d2-config: {
+    pad: 20
+  }
+}
+
+direction: down
+
+D: {
+  shape: square
+  label: "Disconnector"
+}
+T1: {
+  shape: square
+  label: "Terminal 1\n "
+}
+T2: {
+  shape: square
+  label: "Terminal 2\n "
+}
+
+T1 -> D <- T2
+
+----
 
 ---
 
