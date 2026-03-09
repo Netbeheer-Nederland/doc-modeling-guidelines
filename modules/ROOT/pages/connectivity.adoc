@@ -1,38 +1,105 @@
-= Connectivity in CIM
+= Connectivity
 
-Connectivity in CIM explained using  https://netbeheer-nederland.github.io/docs/im-tc57cim/latest/schema/class/Terminal.html[Terminal]  and  https://netbeheer-nederland.github.io/docs/im-tc57cim/latest/schema/class/ConnectivityNode.html[ConnectivityNode] conforms their definition in https://netbeheer-nederland.github.io/docs/im-tc57cim/latest/index.html[TC57CIM v1.1.0]
+:doctype: article
+:encoding: utf-8
+:lang: en
+:toc: right
+:numbered!:
+:figure-caption!:
+:description: This document is part of the modeling guidelines for the NBNL Profile Group.
+:url-repo: https://github.com/Netbeheer-Nederland/doc-modeling-guidelines
+:domain: modellen.netbeheernederland.nl
+:uri: https://{domain}/modeling-guidelines/points
+:version: v0.1 concept
 
-== Terminal
-An AC electrical connection point to a piece of conducting equipment. Terminals are connected at physical connection points called connectivity nodes.
+Author:: mailto:robbert.hardin@alliander.com[Robbert Hardin] (Alliander)
+//Editors::
+//mailto:ritger.teunissen@alliander.com[Ritger Teunissen] (Alliander) +
+//mailto:ritger.teunissen@alliander.com[Ritger Teunissen] (Alliander)
 
-https://netbeheer-nederland.github.io/docs/im-tc57cim/latest/schema/class/Terminal.html[Terminal] 
+Version:: {version}
 
-== ConectivityNode
-Connectivity nodes are points where terminals of AC conducting equipment are connected together with zero impedance.
+Feedback::
+https://github.com/Netbeheer-Nederland/doc-modeling-guidelines/issues[Issue on GitHub] (https://github.com/Netbeheer-Nederland/doc-modeling-guidelines[`Netbeheer-Nederland/doc-modeling-guidelines`])
 
-https://netbeheer-nederland.github.io/docs/im-tc57cim/latest/schema/class/ConnectivityNode.html[ConnectivityNode]
+== Introduction
+This document is part of the grid modelling approach and details the grid model data requirements for data supplied by Dutch transmission and distribution system operators and describes in detail the following terms; *ConductingEquipment, ConnectivityNode, Terminal, TopoolodicalNode.*
 
-Note that cim:ConnectivityNode objects are the means by which connectivity is described in CIM and a typical grid model has many cim:ConnectivityNode objects. [14@LTDS]
+== Connectivity in words
 
-== ConductingEquipment
+An AC power system consistss of conducting equipment designed to carry current. They are connected through terminals who are connected to a conducting equipment object by its connectivity node:
+
+(CE) --has-- (CN) --connectable by-- (T).
+
+A connectivty node is also the way to connect two conducting equipment objects by their terminals:
+
+(CE_1)--(CN_1)--(T_1) --connects to connecting connectivity node--(CN)--connects to terminal of conducting equipement-- (T_2)--(CN_2)--(CE_2)
+
+== Connectivity in diagrams
+
+[d2,svg,theme=4]
+----
+
+title: Connectivity in CIM {
+  near: top-center
+  shape: text
+  style: {
+    font-size: 48
+    bold: true
+  }
+}
+
+vars: {
+  d2-config: {
+    pad: 20
+  }
+}
+
+direction: right
+
+CE
+CN
+T
+
+CE -- CN: has
+CN -- T: connectable by
+
+----
+
+== Connectivy by definition
+
+=== ConductingEquipment
 The parts of the AC power system that are designed to carry current or that are conductively connected through terminals.
 
 https://netbeheer-nederland.github.io/docs/im-tc57cim/latest/schema/class/ConductingEquipment.html[ConductingEquipment]
 
-So, also parts of the AC power system that are _not_ designed to carry current but that are conductively connected through terminals ar _by definition_ Conducting Equipments. Are there any examples? Maybe Breaker objects ? [15@LTDS] According to its https://netbeheer-nederland.github.io/docs/im-tc57cim/v1.0.0/schema/class/Breaker.html[class hierarchy TC57CIM] it is. A Breaker is a ProtectedSwitch is a Switch is a ConductingEquipment. A Breaker carries current, but not constantly. More generally a Switch fits the bil.
+=== ConectivityNode
+Connectivity nodes are points where terminals of AC conducting equipment are connected together with zero impedance.
 
-== Questions
+https://netbeheer-nederland.github.io/docs/im-tc57cim/latest/schema/class/ConnectivityNode.html[ConnectivityNode]
 
-- Two CEs connected by one T. Is this possible?
-- Two CEs connected by two Ts. Default situation?
-- Two CEs connected by more than two Ts. Is this posible? Examples?
+=== Terminal
+An AC electrical connection point to a piece of conducting equipment. Terminals are connected at physical connection points called connectivity nodes.
 
-== LTDS pdf
+https://netbeheer-nederland.github.io/docs/im-tc57cim/latest/schema/class/Terminal.html[Terminal] 
 
-https://www.ofgem.gov.uk/sites/default/files/2024-04/LTDS%20Grid%20Modelling%20Annex%201%20-%20Grid%20Modelling%20Guidelines.pdf[Grid Modelling Annex 1: Grid Modelling Guidelines.pdf (20240430)]
+=== TopologicalNode
+For a detailed substation model a topological node is a set of connectivity nodes that, in the current network state, are connected together through any type of closed switches, including jumpers. Topological nodes change as the current network state changes (i.e., switches, breakers, etc. change state). For a planning model, switch statuses are not used to form topological nodes. Instead they are manually created or deleted in a model builder tool. Topological nodes maintained this way are also called "busses".
 
-This is the most recent version of _Grid Modelling Guidelines_. It contains 20 pages more. But I don't expect to see any major differences. The most important part is _Physical modelling_ [4.3]
+https://netbeheer-nederland.github.io/docs/im-tc57cim/latest/schema/class/TopologicalNode.html[TopologicalNode]
 
-=== CIM, RDFS and ShaCL
-Machine-readable CIM-based data exchanges are described using both RDFS profiles and SHACL-based constraints. RDFS profiles define the structure of the exchanged data (i.e. the vocabulary) - classes, attributes, associations, and cardinalities. SHACL-based constraints (SHACL constraints) define rules related to the data content - more complex requirements which describe allowed or required instances, values and patterns. (See the 3.4 Constraints section of https://www.ofgem.gov.uk/sites/default/files/2024-04/LTDS%20Grid%20Modelling%20Annex%202%20-%20Data%20Exchange%20Specifications.pdf[LTDS Grid Modelling Annex 2 - Data Exchange Specifications] for more detail on the differences between profiles and constraints.)
+
+== Connectivity in use
+
+When you connect several conducting equipment objects there into a string, there are two possibilities:
+
+1. There is no energy consumption. +
+In this case you can simplify your model and your grid calculations by replacing this string of conducting equipment objects by a topological node. This will change your model from a connectivity (node-breaker )model into a toplogical (bus-branch) model. 
+
+2. There is energy consumption. +
+In this case you can add metering devices to your terminal to measure the energy consumption and bill the energy consumer.
+
+---
+
+This document includes text from the https://www.ofgem.gov.uk/decision/long-term-development-statement-direction[LTDS Grid Modelling Guidelines], published under the http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/[Open Government License]
 
